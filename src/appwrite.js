@@ -13,6 +13,11 @@ const database = new Databases(client);
 export const updateSearchCount = async (searchTerm, movie) => {
   // 1. Use Appwrite SDK to check if the search term exists in the database
  try {
+  if (!DATABASE_ID || !COLLECTION_ID) {
+    console.warn('Appwrite credentials not configured. Skipping search count update.');
+    return;
+  }
+
   const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
     Query.equal('searchTerm', searchTerm),
   ])
@@ -48,5 +53,6 @@ export const getTrendingMovies = async () => {
   return result.documents;
  } catch (error) {
   console.error(error);
+  return [];
  }
 }
